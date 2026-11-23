@@ -237,7 +237,7 @@ export async function POST(request: Request) {
     const messages: Message[] = incoming.map((value: unknown) => {
       const message = typeof value === "object" && value !== null ? value as Record<string, unknown> : {};
       return {
-        role: message.role === "model" ? "model" : "user",
+        role: (message.role === "model" ? "model" : "user") as Message["role"],
         text: safeString(message.text, 700),
       };
     }).filter((message) => message.text.length > 0);
