@@ -77,6 +77,7 @@ function normalisePhone(value: string): string {
 function findName(messages: Message[]): string {
   const cleanName = (value: string) => value
     .split(/\b(?:my phone|phone number|i live|i am in|i'm in|we are|from|and my|my ac|the ac)\b/i)[0]
+    .trim()
     .replace(/[.,;:!?]+$/g, "")
     .trim()
     .split(/\s+/)
@@ -122,7 +123,7 @@ function findIssue(text: string): string {
   const keywords = [
     "not cooling", "not cool", "cooling", "leaking", "water leak", "leak",
     "burning smell", "smoke", "sparks", "noise", "rattling", "making a sound",
-    "maintenance", "service", "not turning on", "not working", "no air",
+    "maintenance", "service", "not turning on", "not working", "no air", "water dripping", "dripping", "water coming from",
   ];
   const found = sentences.find((sentence) => keywords.some((word) => sentence.toLowerCase().includes(word)));
   if (found) return found.replace(/^i have\s+/i, "").slice(0, 220);

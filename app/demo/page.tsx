@@ -192,7 +192,6 @@ export default function DemoPage() {
   const saveTicket = useCallback((ticket: Ticket) => {
     setTickets((previous) => [ticket, ...previous].slice(0, 100));
     setSelectedTicketId(ticket.id);
-    setActiveView("requests");
   }, []);
 
   const sendMessage = useCallback(async (value: string, shouldSpeak = false, newConversation = false) => {
@@ -283,6 +282,7 @@ export default function DemoPage() {
     recognitionRef.current?.stop();
     if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     setMessages([GREETING]);
+    setText("");
     setDraft(EMPTY);
     setTicketCreated(false);
     setEscalated(false);
