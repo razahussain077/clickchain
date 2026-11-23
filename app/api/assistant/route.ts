@@ -248,6 +248,8 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
+    let fallbackReason = apiKey ? "Gemini provider did not return a usable response" : "GEMINI_API_KEY is not configured";
+
     if (apiKey) {
       try {
         const contents = messages.map((message) => ({
@@ -279,12 +281,18 @@ export async function POST(request: Request) {
           }
           return Response.json(normaliseAiResult(parsed, messages), { headers: { "Cache-Control": "no-store" } });
         }
+
+        fallbackReason = "Gemini API returned HTTP " + upstream.status;
       } catch (error) {
+        fallbackReason = "Gemini request failed or returned an invalid response";
         console.warn("Gemini unavailable; using guided demo assistant.", error instanceof Error ? error.message : "unknown error");
       }
     }
 
-    return Response.json(guidedResponse(messages), { headers: { "Cache-Control": "no-store" } });
+    return Response.json(
+      { ...guidedResponse(messages), fallbackReason },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch {
     return Response.json({ error: "The demo assistant could not read this request. Please try again." }, { status: 400 });
   }

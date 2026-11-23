@@ -153,7 +153,7 @@ export default function DemoPage() {
     setVoiceSupported(Boolean(speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition));
     fetch("/api/health", { cache: "no-store" })
       .then((response) => response.json())
-      .then((data) => setAssistantMode(data.assistantMode === "gemini" ? "AI assistant" : "Guided demo assistant"))
+      .then((data) => setAssistantMode(data.aiConfigured ? "Gemini key configured" : "Guided demo assistant"))
       .catch(() => setAssistantMode("Guided demo assistant"));
   }, []);
 
@@ -212,6 +212,7 @@ export default function DemoPage() {
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || "The assistant could not respond. Please try again.");
+      setAssistantMode(payload.mode === "gemini" ? "Gemini AI active" : "Guided demo assistant");
       const answer = String(payload.reply || "Thank you. Could you tell me a little more about the request?");
       setMessages((previous) => [...previous, { role: "model", text: answer }]);
       const nextDraft = { ...EMPTY, ...(payload.ticketDraft || {}) } as TicketDraft;
@@ -232,7 +233,8 @@ export default function DemoPage() {
         setTicketCreated(true);
         setNotice("Request created in this browser demo. It has not been sent to a real HVAC company or operations team.");
       } else if (payload.mode === "guided-demo") {
-        setNotice("Guided demo assistant is active. Add a Gemini API key in the server environment to enable live AI-generated replies.");
+        const reason = typeof payload.fallbackReason === "string" ? " (" + payload.fallbackReason + ")" : "";
+        setNotice("This turn used the guided demo assistant rather than a live Gemini response" + reason + ".");
       }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Something went wrong. Please retry.");
