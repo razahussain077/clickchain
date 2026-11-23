@@ -282,7 +282,20 @@ export async function POST(request: Request) {
           return Response.json(normaliseAiResult(parsed, messages), { headers: { "Cache-Control": "no-store" } });
         }
 
-        fallbackReason = "Gemini API returned HTTP " + upstream.status;
+        let providerMessage = "";
+        try {
+          const providerError: unknown = await upstream.json();
+          if (typeof providerError === "object" && providerError !== null) {
+            const errorObject = (providerError as Record<string, unknown>).error;
+            if (typeof errorObject === "object" && errorObject !== null) {
+              const message = (errorObject as Record<string, unknown>).message;
+              if (typeof message === "string") providerMessage = message.replaceAll(apiKey, "[redacted]").slice(0, 180);
+            }
+          }
+        } catch {
+          providerMessage = "";
+        }
+        fallbackReason = "Gemini API HTTP " + upstream.status + (providerMessage ? ": " + providerMessage : "");
       } catch (error) {
         fallbackReason = "Gemini request failed or returned an invalid response";
         console.warn("Gemini unavailable; using guided demo assistant.", error instanceof Error ? error.message : "unknown error");
