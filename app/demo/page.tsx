@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Activity, AlertTriangle, ArrowDownToLine, ArrowLeft, ArrowRight, AudioLines,
-  Bot, Check, CheckCircle2, ChevronDown, ClipboardList, Clock3, Headset,
+  Activity, AlertTriangle, ArrowDownToLine, ArrowLeft, ArrowRight,
+  Bot, Check, CheckCircle2, ChevronDown, ClipboardList, Headset,
   LayoutDashboard, Link2, LoaderCircle, MapPin, MessageSquare, Mic, MicOff,
-  Phone, Plus, RefreshCw, Search, Send, ShieldAlert, ShieldCheck, Sparkles,
+  Phone, Plus, RefreshCw, Search, Send, ShieldAlert, ShieldCheck,
   Trash2, UserRound, Volume2, Wrench, X
 } from "lucide-react";
 
@@ -195,14 +195,15 @@ export default function DemoPage() {
     setActiveView("requests");
   }, []);
 
-  const sendMessage = useCallback(async (value: string, shouldSpeak = false) => {
+  const sendMessage = useCallback(async (value: string, shouldSpeak = false, newConversation = false) => {
     const clean = value.trim().slice(0, 600);
-    if (!clean || loading || ticketCreated) return;
+    if (!clean || loading || (ticketCreated && !newConversation)) return;
     setError("");
     setNotice("");
     setLoading(true);
     setText("");
-    const next = [...messages, { role: "user" as const, text: clean }];
+    const baseMessages = newConversation ? [GREETING] : messages;
+    const next = [...baseMessages, { role: "user" as const, text: clean }];
     setMessages(next);
     try {
       const response = await fetch("/api/assistant", {
@@ -293,16 +294,12 @@ export default function DemoPage() {
 
   const runSampleCall = () => {
     resetConversation();
-    setTimeout(() => {
-      void sendMessage("Hello, my name is Ahmed Rahman. My phone number is +971 50 123 4567. I am in Dubai Marina. My AC is running but not cooling. I need a repair visit.");
-    }, 50);
+    void sendMessage("Hello, my name is Ahmed Rahman. My phone number is +971 50 123 4567. I am in Dubai Marina. My AC is running but not cooling. I need a repair visit.", false, true);
   };
 
   const runSafetyScenario = () => {
     resetConversation();
-    setTimeout(() => {
-      void sendMessage("My name is Huda Malik. My phone number is +971 55 987 1234. I am in Business Bay. There is a burning smell and smoke coming from the AC unit. I need help urgently.");
-    }, 50);
+    void sendMessage("My name is Huda Malik. My phone number is +971 55 987 1234. I am in Business Bay. There is a burning smell and smoke coming from the AC unit. I need help urgently.", false, true);
   };
 
   const addSampleRequest = () => {

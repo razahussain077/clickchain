@@ -61,16 +61,35 @@ function normalisePhone(value: string): string {
   return value.trim().replace(/[().-]/g, "").replace(/\s+/g, " ");
 }
 
-function findName(text: string): string {
-  const match = text.match(/(?:my name is|this is|i am|i'm|name is)\s+([a-z][a-z .'-]{1,55})/i);
-  if (!match) return "";
-  const name = match[1]
+function findName(messages: Message[]): string {
+  const cleanName = (value: string) => value
     .split(/\b(?:my phone|phone number|i live|i am in|i'm in|we are|from|and my|my ac|the ac)\b/i)[0]
     .replace(/[.,;:!?]+$/g, "")
-    .trim();
-  return name.split(/\s+/).slice(0, 4).join(" ").replace(/\b[a-z]/g, (letter) => letter.toUpperCase()).slice(0, 70);
-}
+    .trim()
+    .split(/\s+/)
+    .slice(0, 4)
+    .join(" ")
+    .replace(/\b[a-z]/g, (letter) => letter.toUpperCase())
+    .slice(0, 70);
 
+  for (const message of messages.filter((item) => item.role === "user")) {
+    const match = message.text.match(/(?:my name is|this is|name is|call me)\s+([a-z][a-z .'-]{1,55})/i);
+    if (match) {
+      const result = cleanName(match[1]);
+      if (result) return result;
+    }
+  }
+
+  for (let index = 1; index < messages.length; index += 1) {
+    const previous = messages[index - 1];
+    const current = messages[index];
+    if (previous.role === "model" && current.role === "user" && /\bname\b/i.test(previous.text)) {
+      const candidate = current.text.trim().replace(/[.,;:!?]+$/g, "");
+      if (/^[a-z][a-z .'-]{1,55}$/i.test(candidate)) return cleanName(candidate);
+    }
+  }
+  return "";
+}
 function findPhone(text: string): string {
   const matches = text.match(/(?:\+?\d[\d\s().-]{6,}\d)/g) || [];
   for (const candidate of matches) {
@@ -101,7 +120,7 @@ function findIssue(text: string): string {
 function guidedResponse(messages: Message[]) {
   const userText = messages.filter((message) => message.role === "user").map((message) => message.text).join("\n");
   const draft: Draft = { ...EMPTY };
-  draft.customerName = findName(userText);
+  draft.customerName = findName(messages);
   draft.phone = findPhone(userText);
   draft.area = findArea(userText);
   draft.issue = findIssue(userText);
