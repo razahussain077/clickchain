@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
-  --background: #071426;
-  --foreground: #f8fafc;
+  color-scheme: light;
+  --background: #f6f8fc;
+  --foreground: #18253b;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -15,6 +15,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
-::selection { background: rgba(37, 99, 235, .45); color: white; }
-button, input, textarea { font: inherit; }
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; }
+::selection { background: rgba(37, 99, 235, .18); color: #10213f; }
+button, input, textarea, select { font: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #4384ee;
+  outline-offset: 3px;
+}

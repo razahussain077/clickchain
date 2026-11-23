@@ -6,10 +6,10 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ClickChain — AI Service Desk for HVAC & Field Service",
-  description: "AI-powered call handling and structured service-request automation for HVAC and field-service teams.",
+  title: "ClickChain — AI Job Intake for HVAC Teams",
+  description: "Capture HVAC service enquiries, create structured job requests and route urgent cases to a human.",
   applicationName: "ClickChain",
-  keywords: ["HVAC automation", "AI service desk", "voice AI", "field service automation", "job intake"],
+  keywords: ["HVAC job intake", "AI service desk", "voice AI", "field service operations"],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
