@@ -1,6 +1,14 @@
 export const runtime = "nodejs";
 
 type Message = { role: "user" | "model"; text: string };
+type AiPayload = {
+  reply?: unknown;
+  ticketDraft?: Partial<Record<keyof Draft, unknown>>;
+  readyToCreateTicket?: unknown;
+  needsHuman?: unknown;
+  escalationReason?: unknown;
+};
+
 type Draft = {
   customerName: string;
   phone: string;
@@ -180,8 +188,9 @@ function guidedResponse(messages: Message[]) {
   };
 }
 
-function normaliseAiResult(parsed: any, messages: Message[]) {
-  const draft = parsed?.ticketDraft || {};
+function normaliseAiResult(value: unknown, messages: Message[]) {
+  const parsed = (typeof value === "object" && value !== null ? value : {}) as AiPayload;
+  const draft = parsed.ticketDraft || {};
   const safeDraft: Draft = {
     customerName: safeString(draft.customerName, 70),
     phone: normalisePhone(safeString(draft.phone, 40)),
@@ -213,16 +222,20 @@ function normaliseAiResult(parsed: any, messages: Message[]) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const incoming = Array.isArray(body?.messages) ? body.messages.slice(-12) : [];
+    const body: unknown = await request.json();
+    const bodyRecord = typeof body === "object" && body !== null ? body as Record<string, unknown> : {};
+    const incoming = Array.isArray(bodyRecord.messages) ? bodyRecord.messages.slice(-12) : [];
     if (incoming.length === 0) {
       return Response.json({ error: "Send a short conversation to continue the demo." }, { status: 400 });
     }
 
-    const messages: Message[] = incoming.map((message: any) => ({
-      role: message?.role === "model" ? "model" : "user",
-      text: safeString(message?.text, 700),
-    })).filter((message: Message) => message.text.length > 0);
+    const messages: Message[] = incoming.map((value: unknown) => {
+      const message = typeof value === "object" && value !== null ? value as Record<string, unknown> : {};
+      return {
+        role: message.role === "model" ? "model" : "user",
+        text: safeString(message.text, 700),
+      };
+    }).filter((message) => message.text.length > 0);
 
     if (messages.length === 0) {
       return Response.json({ error: "The conversation did not contain any text." }, { status: 400 });
@@ -250,7 +263,7 @@ export async function POST(request: Request) {
         if (upstream.ok) {
           const result = await upstream.json();
           const raw = result?.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text || "").join("") || "";
-          let parsed: any;
+          let parsed: unknown;
           try { parsed = JSON.parse(raw); }
           catch {
             const first = raw.indexOf("{");

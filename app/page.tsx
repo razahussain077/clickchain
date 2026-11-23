@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
-  ArrowRight, ArrowUpRight, CheckCircle2, ClipboardList, Headset,
-  Link2, PhoneCall, ShieldCheck, Workflow, Wrench
+  ArrowRight, ArrowUpRight, CheckCircle2, ClipboardList,
+  Link2, PhoneCall, ShieldCheck, Workflow
 } from "lucide-react";
 
 const steps = [
@@ -94,7 +94,7 @@ export default function Home() {
 
       <section id="control" className="border-y border-slate-200 bg-[#eef4ff] py-16 lg:py-20">
         <div className="mx-auto grid max-w-7xl items-center gap-9 px-5 sm:px-8 lg:grid-cols-[1fr_auto]">
-          <div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.19em] text-blue-700">Designed for operators</p><h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">The AI prepares the job. Your team stays in charge.</h2><p className="mt-4 leading-7 text-slate-600">Pricing, technician availability, dispatch and final appointments remain under your team's control. Start with intake; connect a phone number, CRM or field-service platform only after the workflow is agreed and tested.</p></div>
+          <div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.19em] text-blue-700">Designed for operators</p><h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">The AI prepares the job. Your team stays in charge.</h2><p className="mt-4 leading-7 text-slate-600">Pricing, technician availability, dispatch and final appointments remain under your team&apos;s control. Start with intake; connect a phone number, CRM or field-service platform only after the workflow is agreed and tested.</p></div>
           <Link href="/demo" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700">Open the demo workspace <ArrowRight size={16}/></Link>
         </div>
       </section>

@@ -55,8 +55,8 @@ export default function ChatBot() {
       
       addAssistantMessage(data.message);
       
-    } catch (err: any) {
-      const errorMsg = err.message || 'An unknown network error occurred.';
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : 'An unknown network error occurred.';
       setError(errorMsg);
       console.error("Error fetching greeting:", errorMsg);
     } finally {
@@ -91,9 +91,9 @@ export default function ChatBot() {
       
       addAssistantMessage(data.message);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       // This will catch network errors or errors from the check above
-      const errorMsg = err.message || 'An unknown network error occurred. Please try again.';
+      const errorMsg = err instanceof Error ? err.message : 'An unknown network error occurred. Please try again.';
       addAssistantMessage(`Sorry, I ran into an issue: "${errorMsg}"`);
       console.error("Error sending message:", errorMsg);
     } finally {

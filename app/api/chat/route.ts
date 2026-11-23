@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const message = data.choices[0]?.message?.content;
 
     return NextResponse.json({ message });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Unhandled API Error:', error);
     return NextResponse.json({ error: 'Failed to connect to the AI service.' }, { status: 500 });
   }

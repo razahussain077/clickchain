@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity, AlertTriangle, ArrowDownToLine, ArrowLeft, ArrowRight,
-  Bot, Check, CheckCircle2, ChevronDown, ClipboardList, Headset,
+  Bot, Check, CheckCircle2, ChevronDown, ClipboardList, Headset, PhoneCall,
   LayoutDashboard, Link2, LoaderCircle, MapPin, MessageSquare, Mic, MicOff,
   Phone, Plus, RefreshCw, Search, Send, ShieldAlert, ShieldCheck,
   Trash2, UserRound, Volume2, Wrench, X
@@ -479,7 +479,7 @@ export default function DemoPage() {
                     <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><Phone size={17}/></span><div className="min-w-0 flex-1"><p className="text-xs font-semibold text-slate-800">UAE phone connection</p><p className="text-[11px] text-slate-500">Not connected</p></div><span className="text-[10px] font-bold text-amber-700">Pending</span></div>
                     <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-700"><Wrench size={17}/></span><div className="min-w-0 flex-1"><p className="text-xs font-semibold text-slate-800">CRM / dispatch software</p><p className="text-[11px] text-slate-500">Not connected</p></div><span className="text-[10px] font-bold text-amber-700">Pending</span></div>
                   </div>
-                  <p className="mt-5 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-500">Browser voice input depends on Chrome permissions. The phone and CRM integrations require the customer's selected providers and credentials.</p>
+                  <p className="mt-5 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-500">Browser voice input depends on Chrome permissions. The phone and CRM integrations require the customer&apos;s selected providers and credentials.</p>
                 </section>
               </div>
 
@@ -600,7 +600,7 @@ export default function DemoPage() {
                       <select value={selectedTicket.status} onChange={(event) => updateStatus(selectedTicket.id, event.target.value)} className="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 outline-none focus:border-blue-400"><option>New</option><option>In review</option><option>Needs human review</option><option>Resolved</option></select>
                     </div>
                     <div className="mt-3 grid grid-cols-2 gap-2"><button onClick={() => void copySummary(selectedTicket)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2.5 text-[11px] font-bold text-slate-700 hover:bg-slate-50"><MessageSquare size={13}/> Copy summary</button><button onClick={() => deleteTicket(selectedTicket.id)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-200 px-3 py-2.5 text-[11px] font-bold text-rose-700 hover:bg-rose-50"><Trash2 size={13}/> Delete</button></div>
-                    <p className="mt-4 text-[10px] leading-4 text-slate-400">Status changes affect this browser's demo copy only. No technician or customer is notified.</p>
+                    <p className="mt-4 text-[10px] leading-4 text-slate-400">Status changes affect this browser&apos;s demo copy only. No technician or customer is notified.</p>
                   </section>
                 ) : (
                   <section className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center"><ClipboardList size={24} className="mx-auto text-slate-300"/><p className="mt-3 text-xs font-bold text-slate-700">Select a request</p><p className="mt-1 text-[11px] text-slate-500">Choose a row to view the job details.</p></section>
