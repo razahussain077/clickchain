@@ -130,7 +130,7 @@ export default function ChatBot() {
               <h3 className="text-white font-semibold text-sm">Bright Smile Dental</h3>
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-blue-100 text-xs">Online — We'll reply shortly</span>
+                <span className="text-blue-100 text-xs">Online — We&apos;ll reply shortly</span>
               </div>
             </div>
           </div>
