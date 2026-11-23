@@ -63,6 +63,11 @@ function safeString(value: unknown, max = 240): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+function pickOption(value: unknown, options: string[], fallback: string): string {
+  const candidate = safeString(value, 60);
+  return options.includes(candidate) ? candidate : fallback;
+}
+
 function normalisePhone(value: string): string {
   const digits = value.replace(/\D/g, "");
   if (digits.length < 8 || digits.length > 15) return "";
@@ -196,9 +201,9 @@ function normaliseAiResult(value: unknown, messages: Message[]) {
     phone: normalisePhone(safeString(draft.phone, 40)),
     area: safeString(draft.area, 100),
     issue: safeString(draft.issue, 220),
-    serviceType: ["Repair", "Maintenance", "AMC", "General enquiry"].includes(draft.serviceType) ? draft.serviceType : "Repair",
-    amcStatus: ["Active", "Inactive", "Unknown"].includes(draft.amcStatus) ? draft.amcStatus : "Unknown",
-    priority: ["Normal", "Urgent", "Safety escalation"].includes(draft.priority) ? draft.priority : "Normal",
+    serviceType: pickOption(draft.serviceType, ["Repair", "Maintenance", "AMC", "General enquiry"], "Repair"),
+    amcStatus: pickOption(draft.amcStatus, ["Active", "Inactive", "Unknown"], "Unknown"),
+    priority: pickOption(draft.priority, ["Normal", "Urgent", "Safety escalation"], "Normal"),
     summary: safeString(draft.summary, 300),
   };
   const source = messages.filter((message) => message.role === "user").map((message) => message.text).join(" ").toLowerCase();
